@@ -3,7 +3,7 @@ package com.yorhp.crashutil;
 import android.app.Application;
 import android.os.Environment;
 
-import com.yorhp.crashlibrary.CrashHander;
+import com.yorhp.crashlibrary.CrashUtil;
 import com.yorhp.crashlibrary.saveErro.SaveErroToSDCard;
 
 /**
@@ -20,6 +20,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        CrashHander.getInstance().init(this, new SaveErroToSDCard(erroPath));
+        CrashUtil.getInstance().init(this);
+        CrashUtil.getInstance().setmSaveErro(new SaveErroToSDCard(erroPath));
     }
 }

@@ -14,7 +14,7 @@ import com.yorhp.crashlibrary.saveErro.ISaveErro;
  * description：
  */
 
-public class CrashHander implements Thread.UncaughtExceptionHandler {
+public class CrashUtil implements Thread.UncaughtExceptionHandler {
 
 
     public static String PHONE_INFO;
@@ -23,16 +23,19 @@ public class CrashHander implements Thread.UncaughtExceptionHandler {
 
     private Thread.UncaughtExceptionHandler mDefultCrashHandler;
 
-    public static CrashHander getInstance() {
+    public static CrashUtil getInstance() {
         return CrashHanderHolder.crashHander;
     }
 
-    public void init(Context context, ISaveErro saveErro) {
+    public void init(Context context) {
         mContext = context.getApplicationContext();
-        mSaveErro = saveErro;
         PHONE_INFO = savePhoneInfo(mContext);
         mDefultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
+    }
+
+    public void setmSaveErro(ISaveErro mSaveErro) {
+        this.mSaveErro = mSaveErro;
     }
 
     /**
@@ -46,17 +49,17 @@ public class CrashHander implements Thread.UncaughtExceptionHandler {
         if (mSaveErro != null) {
             mSaveErro.saveErroMsg(throwable);
         }
+
         if (mDefultCrashHandler != null) {
             mDefultCrashHandler.uncaughtException(thread, throwable);
         } else {
-
             android.os.Process.killProcess(android.os.Process.myPid());
         }
 
     }
 
     static class CrashHanderHolder {
-        static CrashHander crashHander = new CrashHander();
+        static CrashUtil crashHander = new CrashUtil();
     }
 
     // 保存手机的信息

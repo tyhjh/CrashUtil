@@ -1,6 +1,6 @@
 package com.yorhp.crashlibrary.saveErro;
 
-import com.yorhp.crashlibrary.CrashHander;
+import com.yorhp.crashlibrary.CrashUtil;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -43,7 +43,7 @@ public class SaveErroToSDCard implements ISaveErro {
 
             PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
             pw.println(time);
-            pw.println(CrashHander.PHONE_INFO);
+            pw.println(CrashUtil.PHONE_INFO);
             throwable.printStackTrace(pw);   //输出异常信息
             pw.close();
 
