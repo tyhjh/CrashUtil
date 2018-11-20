@@ -46,21 +46,29 @@ public class CrashUtil implements Thread.UncaughtExceptionHandler {
      */
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
+        //对异常进行保存处理
+        if (!handleException(thread, throwable) && mDefultCrashHandler != null) {
+            mDefultCrashHandler.uncaughtException(thread, throwable);
+        } else {
+            //这里是应该要关闭程序的，异常会导致APP出现问题，ANR黑屏等
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
+    }
+
+    private boolean handleException(Thread thread, Throwable throwable) {
+        if (thread == null || throwable == null) {
+            return false;
+        }
         if (mSaveErro != null) {
             mSaveErro.saveErroMsg(throwable);
         }
-
-        if (mDefultCrashHandler != null) {
-            mDefultCrashHandler.uncaughtException(thread, throwable);
-        } else {
-            android.os.Process.killProcess(android.os.Process.myPid());
-        }
-
+        return true;
     }
 
     static class CrashHanderHolder {
         static CrashUtil crashHander = new CrashUtil();
     }
+
 
     // 保存手机的信息
     private String savePhoneInfo(Context context) {
