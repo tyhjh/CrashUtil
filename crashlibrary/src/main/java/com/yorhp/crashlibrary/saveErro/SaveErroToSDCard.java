@@ -14,6 +14,8 @@ import java.util.Date;
  * 邮箱：tyhj5@qq.com
  * github：github.com/tyhjh
  * description：SaveErroToSDCard
+ *
+ * @author Tyhj
  */
 
 public class SaveErroToSDCard implements ISaveErro {
@@ -44,7 +46,8 @@ public class SaveErroToSDCard implements ISaveErro {
             PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
             pw.println(time);
             pw.println(CrashUtil.PHONE_INFO);
-            throwable.printStackTrace(pw);   //输出异常信息
+            //输出异常信息
+            throwable.printStackTrace(pw);
             pw.close();
 
         } catch (Exception e) {
