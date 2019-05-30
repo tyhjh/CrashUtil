@@ -1,5 +1,7 @@
 package com.yorhp.crashlibrary.saveErro;
 
+import android.os.SystemClock;
+
 import com.yorhp.crashlibrary.CrashUtil;
 
 import java.io.BufferedWriter;
@@ -34,25 +36,34 @@ public class SaveErroToSDCard implements ISaveErro {
     }
 
     @Override
-    public void saveErroMsg(Throwable throwable) {
-        try {
-            // 获取当前时间
-            long current = System.currentTimeMillis();
-            String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(current));
-            // 创建存储异常信息的文件
-            File file = new File(saveErroDir + FILE_NAME + time + FILE_NAME_SUFFIX);
-            file.createNewFile();
+    public void saveErroMsg(final Throwable throwable) {
 
-            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-            pw.println(time);
-            pw.println(CrashUtil.PHONE_INFO);
-            //输出异常信息
-            throwable.printStackTrace(pw);
-            pw.close();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // 获取当前时间
+                    long current = System.currentTimeMillis();
+                    String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(current));
+                    // 创建存储异常信息的文件
+                    File file = new File(saveErroDir + FILE_NAME + time + FILE_NAME_SUFFIX);
+                    file.createNewFile();
+
+                    PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+                    pw.println(time);
+                    pw.println(CrashUtil.PHONE_INFO);
+                    //输出异常信息
+                    throwable.printStackTrace(pw);
+                    pw.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        SystemClock.sleep(6000);
+
     }
 
 

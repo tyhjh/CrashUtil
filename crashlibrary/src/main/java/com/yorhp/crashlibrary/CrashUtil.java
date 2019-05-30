@@ -51,7 +51,7 @@ public class CrashUtil implements Thread.UncaughtExceptionHandler {
             mDefultCrashHandler.uncaughtException(thread, throwable);
         } else {
             //这里是应该要关闭程序的，异常会导致APP出现问题，ANR黑屏等
-            android.os.Process.killProcess(android.os.Process.myPid());
+            //android.os.Process.killProcess(android.os.Process.myPid());
         }
     }
 
